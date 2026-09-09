@@ -1,10 +1,15 @@
 """곡 제목/아티스트를 입력받아 무드를 분석하는 API 서버."""
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, send_from_directory
 
 from backend import audio_energy, deezer_client, lyrics_client, lyrics_sentiment, mood_engine
+
+# 자동완성 후보마다 가사 확보 여부를 확인해야 해서 병렬로 조회한다.
+_SUGGESTION_POOL_SIZE = 15
+_SUGGESTION_RESULT_LIMIT = 8
 
 load_dotenv()
 
@@ -24,8 +29,14 @@ def search():
     query = (request.args.get("q") or "").strip()
     if len(query) < 2:
         return jsonify({"results": []})
-    results = deezer_client.search_tracks(query)
-    return jsonify({"results": results})
+
+    candidates = deezer_client.search_tracks(query, limit=_SUGGESTION_POOL_SIZE)
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        lyrics_found = executor.map(
+            lambda track: lyrics_client.has_lyrics(track["title"], track["artist"]), candidates
+        )
+    results = [track for track, found in zip(candidates, lyrics_found) if found]
+    return jsonify({"results": results[:_SUGGESTION_RESULT_LIMIT]})
 
 
 @app.post("/api/analyze")
@@ -53,13 +64,10 @@ def analyze():
 
     lyrics_used = False
     valence = 0.5
-    try:
-        lyrics = lyrics_client.fetch_lyrics(track["title"], track["artist"])
-        if lyrics:
-            valence = lyrics_sentiment.sentiment_to_valence(lyrics)
-            lyrics_used = True
-    except RuntimeError:
-        pass
+    lyrics = lyrics_client.fetch_lyrics(track["title"], track["artist"])
+    if lyrics:
+        valence = lyrics_sentiment.sentiment_to_valence(lyrics)
+        lyrics_used = True
 
     mood = mood_engine.classify_mood(valence=valence, energy=energy)
 
