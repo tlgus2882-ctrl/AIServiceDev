@@ -88,6 +88,7 @@ def analyze():
                 "bpm": bpm,
                 "bpm_estimated": bpm_estimated,
                 "album_cover": track["album_cover"],
+                "preview_url": track["preview_url"],
             },
             "mood": mood,
             "lyrics_used": lyrics_used,

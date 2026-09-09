@@ -132,9 +132,36 @@ async function analyze(body) {
       ? "사용함"
       : "사용 안 함 (가사를 찾지 못함)";
 
+    const audioEl = document.getElementById("result-audio");
+    if (data.track.preview_url) {
+      audioEl.src = data.track.preview_url;
+      audioEl.hidden = false;
+    } else {
+      audioEl.removeAttribute("src");
+      audioEl.hidden = true;
+    }
+
+    updateMoodGraph(data.mood.valence, data.mood.energy);
+
     resultSection.hidden = false;
   } catch (err) {
     errorEl.textContent = err.message;
     errorEl.hidden = false;
   }
+}
+
+const GRAPH_CENTER = 130;
+const GRAPH_SCALE = 170; // 원 반지름(85)의 2배 — valence/energy(0~1)를 원 좌표로 변환
+
+function updateMoodGraph(valence, energy) {
+  const x = GRAPH_CENTER + (valence - 0.5) * GRAPH_SCALE;
+  const y = GRAPH_CENTER - (energy - 0.5) * GRAPH_SCALE;
+
+  const point = document.getElementById("mood-graph-point");
+  point.setAttribute("cx", x);
+  point.setAttribute("cy", y);
+
+  const radiusLine = document.getElementById("mood-graph-radius");
+  radiusLine.setAttribute("x2", x);
+  radiusLine.setAttribute("y2", y);
 }

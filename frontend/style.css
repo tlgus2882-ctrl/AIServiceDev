@@ -19,7 +19,7 @@
 
 body {
   font-family: system-ui, sans-serif;
-  max-width: 480px;
+  max-width: 640px;
   margin: 40px auto;
   padding: 0 16px;
   background: var(--bg);
@@ -114,12 +114,68 @@ button {
   width: 100%;
 }
 
+.result-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.result-left,
+.result-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 #result-cover {
   width: 160px;
   height: 160px;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+#result-audio {
+  width: 220px;
+}
+
+.wheel-circle {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.wheel-axis {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.wheel-tick {
+  stroke: var(--border);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+.wheel-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.wheel-radius {
+  stroke: #7c5cff;
+  stroke-width: 2;
+}
+
+.wheel-point {
+  fill: #7c5cff;
+  stroke: var(--bg);
+  stroke-width: 2;
 }
 
 #result dl {
