@@ -1,0 +1,10 @@
+flask
+python-dotenv
+requests
+lyricsgenius
+vaderSentiment
+librosa
+numpy
+
+# 테스트용
+pytest

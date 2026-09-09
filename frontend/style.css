@@ -1,0 +1,29 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+form {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+input {
+  flex: 1;
+  padding: 8px;
+}
+
+button {
+  padding: 8px 16px;
+}
+
+#error {
+  color: #c0392b;
+}
