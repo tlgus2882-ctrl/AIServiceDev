@@ -125,7 +125,9 @@ async function analyze(body) {
     document.getElementById("result-cover").src = data.track.album_cover || "";
     document.getElementById("result-title").textContent = `${data.track.title} - ${data.track.artist}`;
     document.getElementById("result-mood").textContent = `${data.mood.mood_ko} (${data.mood.mood_en})`;
-    document.getElementById("result-bpm").textContent = data.track.bpm ? Math.round(data.track.bpm) : "정보 없음";
+    document.getElementById("result-bpm").textContent = data.track.bpm
+      ? `${Math.round(data.track.bpm)}${data.track.bpm_estimated ? " (추정)" : ""}`
+      : "정보 없음";
     document.getElementById("result-lyrics").textContent = data.lyrics_used
       ? "사용함"
       : "사용 안 함 (가사를 찾지 못함)";

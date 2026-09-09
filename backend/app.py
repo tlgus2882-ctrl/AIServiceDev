@@ -56,11 +56,20 @@ def analyze():
         return jsonify({"error": "곡을 찾을 수 없습니다."}), 404
 
     energy = 0.5
+    estimated_tempo = None
     if track.get("preview_url"):
         try:
-            energy = audio_energy.analyze_preview_url(track["preview_url"])["energy"]
+            audio_features = audio_energy.analyze_preview_url(track["preview_url"])
+            energy = audio_features["energy"]
+            estimated_tempo = audio_features["tempo"]
         except Exception:
-            energy = 0.5
+            pass
+
+    bpm = track["bpm"]
+    bpm_estimated = False
+    if not bpm and estimated_tempo:
+        bpm = round(estimated_tempo, 1)
+        bpm_estimated = True
 
     lyrics_used = False
     valence = 0.5
@@ -76,7 +85,8 @@ def analyze():
             "track": {
                 "title": track["title"],
                 "artist": track["artist"],
-                "bpm": track["bpm"],
+                "bpm": bpm,
+                "bpm_estimated": bpm_estimated,
                 "album_cover": track["album_cover"],
             },
             "mood": mood,
