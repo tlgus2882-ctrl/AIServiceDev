@@ -78,4 +78,5 @@ def analyze():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    # macOS는 5000번 포트를 AirPlay 수신 기능이 기본으로 사용해 충돌(403)이 나므로 5050을 쓴다.
+    app.run(debug=True, port=5050)

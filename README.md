@@ -24,7 +24,9 @@ cp .env.example .env
 python -m backend.app
 ```
 
-브라우저에서 http://localhost:5000 접속.
+브라우저에서 http://localhost:5050 접속.
+(macOS는 5000번 포트를 AirPlay 수신 기능이 기본으로 점유해 403 에러가 나기 때문에 5050번을 사용한다.
+필요하면 시스템 설정 > 일반 > AirDrop 및 Handoff > AirPlay 수신 기능을 꺼도 된다.)
 
 ### 테스트
 
