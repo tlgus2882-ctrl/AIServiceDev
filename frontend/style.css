@@ -1,5 +1,20 @@
 :root {
   color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #666666;
+  --border: #cccccc;
+  --hover: rgba(0, 0, 0, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e1e;
+    --fg: #f0f0f0;
+    --muted: #aaaaaa;
+    --border: #444444;
+    --hover: rgba(255, 255, 255, 0.08);
+  }
 }
 
 body {
@@ -7,23 +22,125 @@ body {
   max-width: 480px;
   margin: 40px auto;
   padding: 0 16px;
+  background: var(--bg);
+  color: var(--fg);
+  text-align: center;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+p {
+  color: var(--muted);
 }
 
 form {
   display: flex;
   gap: 8px;
+  justify-content: center;
+  width: 100%;
   margin: 16px 0;
 }
 
-input {
+.search-box {
+  position: relative;
   flex: 1;
+  max-width: 320px;
+}
+
+.search-box input {
+  width: 100%;
   padding: 8px;
+  box-sizing: border-box;
+}
+
+#suggestions {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+#suggestions li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+#suggestions li:hover,
+#suggestions li.active {
+  background: var(--hover);
+}
+
+#suggestions img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+#suggestions span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 button {
   padding: 8px 16px;
 }
 
+#result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+#result-cover {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+#result dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 4px 12px;
+  justify-content: center;
+  margin: 8px 0 0;
+}
+
+#result dt {
+  font-weight: bold;
+  text-align: right;
+  color: var(--muted);
+}
+
+#result dd {
+  margin: 0;
+  text-align: left;
+}
+
 #error {
-  color: #c0392b;
+  color: #e05252;
 }

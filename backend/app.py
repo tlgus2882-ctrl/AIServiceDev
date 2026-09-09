@@ -19,14 +19,28 @@ def index():
     return send_from_directory(app.static_folder, "index.html")
 
 
+@app.get("/api/search")
+def search():
+    query = (request.args.get("q") or "").strip()
+    if len(query) < 2:
+        return jsonify({"results": []})
+    results = deezer_client.search_tracks(query)
+    return jsonify({"results": results})
+
+
 @app.post("/api/analyze")
 def analyze():
     payload = request.get_json(silent=True) or {}
+    track_id = payload.get("track_id")
     query = (payload.get("query") or "").strip()
-    if not query:
-        return jsonify({"error": "query가 필요합니다."}), 400
 
-    track = deezer_client.search_track(query)
+    if track_id:
+        track = deezer_client.get_track(track_id)
+    elif query:
+        track = deezer_client.search_track(query)
+    else:
+        return jsonify({"error": "query 또는 track_id가 필요합니다."}), 400
+
     if track is None:
         return jsonify({"error": "곡을 찾을 수 없습니다."}), 404
 
